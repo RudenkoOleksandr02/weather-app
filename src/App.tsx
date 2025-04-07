@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Container, Loader, Space } from '@mantine/core';
+import SearchForm from './components/SearchForm';
+import ErrorMessage from './components/ErrorMessage';
+import ForecastList from './components/ForecastList';
+import { useWeather } from './hooks/useWeather';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App: React.FC = () => {
+    const [city, setCity] = useState('Київ');
+    const { weather, error, loading, lastUpdated } = useWeather(city);
+
+    return (
+        <Container size="lg" py="xl">
+            <SearchForm onSearch={setCity} />
+            <h2>Прогноз погоди: {city}</h2>
+            {loading && <Loader data-testid="data-loader" variant="bars"/>}
+            {error && <ErrorMessage message={error} />}
+            <Space h='md'/>
+            {weather && <ForecastList forecast={weather} lastUpdated={lastUpdated}/>}
+        </Container>
+    );
+};
 
 export default App;
