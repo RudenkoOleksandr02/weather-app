@@ -1,12 +1,12 @@
 import React from 'react';
 import {screen} from '@testing-library/react';
 import App from './App';
-import * as useWeatherHook from './hooks/useWeather';
+import {useWeather} from './hooks/useWeather';
 import {renderWithMantineProvider} from "./test/helpers/renderWithMantineProvider";
 import {DailyWeather} from "./services/fetchWeather";
 
 jest.mock('./hooks/useWeather');
-const mockUseWeather = useWeatherHook.useWeather as jest.Mock;
+const mockUseWeather = useWeather as jest.Mock;
 
 describe('App', () => {
   beforeEach(() => {

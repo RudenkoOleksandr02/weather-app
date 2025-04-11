@@ -1,9 +1,11 @@
 import axios from 'axios';
-import { fetchWeather } from './fetchWeather';
-import {CityCoordinates, fetchCityCoordinates} from './fetchCityCoordinates';
+import {CityCoordinates, fetchCityCoordinates} from "../fetchCityCoordinates";
+import {fetchWeather} from "../fetchWeather";
+import {WEATHER_API_KEY} from "../../constants/environment";
+
 
 jest.mock('axios');
-jest.mock('./fetchCityCoordinates');
+jest.mock('../fetchCityCoordinates');
 
 describe('fetchWeather', () => {
     const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -49,7 +51,7 @@ describe('fetchWeather', () => {
                 lat: coordinates.lat,
                 lon: coordinates.lon,
                 exclude: 'current,minutely,hourly,alerts',
-                appid: process.env.REACT_APP_WEATHER_API_KEY,
+                appid: WEATHER_API_KEY,
                 units: 'metric',
                 lang: 'ua',
             }),

@@ -1,14 +1,14 @@
-import React, { useState, FormEvent } from 'react';
-import { TextInput, Button, Group } from '@mantine/core';
+import React from 'react';
+import {TextInput, Button, Group} from '@mantine/core';
 
 interface SearchFormProps {
     onSearch: (city: string) => void;
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
-    const [city, setCity] = useState('');
+    const [city, setCity] = React.useState('');
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (city.trim()) {
             onSearch(city.trim());

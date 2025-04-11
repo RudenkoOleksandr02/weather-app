@@ -1,7 +1,5 @@
 import axios from 'axios';
-
-const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
-const BASE_URL = process.env.REACT_APP_WEATHER_BASE_URL;
+import {WEATHER_API_KEY, WEATHER_BASE_URL} from "../constants/environment";
 
 export interface CityCoordinates {
     name: string;
@@ -13,11 +11,11 @@ export interface CityCoordinates {
 
 export const fetchCityCoordinates = async (city: string): Promise<CityCoordinates | null> => {
     try {
-        const response = await axios.get(`${BASE_URL}/geo/1.0/direct`, {
+        const response = await axios.get(`${WEATHER_BASE_URL}/geo/1.0/direct`, {
             params: {
                 q: city,
                 limit: 1,
-                appid: API_KEY,
+                appid: WEATHER_API_KEY,
             },
         });
 

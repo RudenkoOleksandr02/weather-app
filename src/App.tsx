@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Container, Loader, Space } from '@mantine/core';
+import React from 'react';
+import {Container, Loader, Space} from '@mantine/core';
 import SearchForm from './components/SearchForm';
 import ErrorMessage from './components/ErrorMessage';
 import ForecastList from './components/ForecastList';
-import { useWeather } from './hooks/useWeather';
+import {useWeather} from './hooks/useWeather';
 
 const App: React.FC = () => {
-    const [city, setCity] = useState('Київ');
-    const { weather, error, loading, lastUpdated } = useWeather(city);
+    const [city, setCity] = React.useState('Київ');
+    const {weather, error, loading, lastUpdated} = useWeather(city);
 
     return (
         <Container size="lg" py="xl">

@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { fetchWeather, DailyWeather } from '../services/fetchWeather';
-import { getCache, setCache } from '../services/cacheService';
+import React from 'react';
+import {fetchWeather, DailyWeather} from '../services/fetchWeather';
+import {getCache, setCache} from "../storage/cache";
 
 export const useWeather = (city: string) => {
-    const [weather, setWeather] = useState<DailyWeather[] | null>(null);
-    const [error, setError] = useState<string>('');
-    const [loading, setLoading] = useState<boolean>(false);
-    const [lastUpdated, setLastUpdated] = useState<number>(0);
+    const [weather, setWeather] = React.useState<DailyWeather[] | null>(null);
+    const [error, setError] = React.useState<string>('');
+    const [loading, setLoading] = React.useState<boolean>(false);
+    const [lastUpdated, setLastUpdated] = React.useState<number>(0);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (!city) return;
 
         const loadWeather = async () => {

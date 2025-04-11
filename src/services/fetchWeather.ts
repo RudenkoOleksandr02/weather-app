@@ -1,8 +1,6 @@
 import axios from 'axios';
-import { fetchCityCoordinates } from './fetchCityCoordinates';
-
-const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
-const BASE_URL = process.env.REACT_APP_WEATHER_BASE_URL;
+import {fetchCityCoordinates} from './fetchCityCoordinates';
+import {WEATHER_API_KEY, WEATHER_BASE_URL} from "../constants/environment";
 
 export interface DailyWeather {
     dt: number;
@@ -27,12 +25,12 @@ export const fetchWeather = async (city: string): Promise<DailyWeather[]> => {
             throw new Error(`Місто ${city} не знайдено`);
         }
 
-        const forecastResponse = await axios.get(`${BASE_URL}/data/3.0/onecall`, {
+        const forecastResponse = await axios.get(`${WEATHER_BASE_URL}/data/3.0/onecall`, {
             params: {
                 lat: coordinates.lat,
                 lon: coordinates.lon,
                 exclude: 'current,minutely,hourly,alerts',
-                appid: API_KEY,
+                appid: WEATHER_API_KEY,
                 units: 'metric',
                 lang: 'ua',
             },

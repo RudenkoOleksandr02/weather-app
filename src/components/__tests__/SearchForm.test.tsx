@@ -1,7 +1,7 @@
 import React from 'react';
 import {fireEvent, screen} from '@testing-library/react';
-import {renderWithMantineProvider} from "../test/helpers/renderWithMantineProvider";
-import SearchForm from "./SearchForm";
+import {renderWithMantineProvider} from "../../test/helpers/renderWithMantineProvider";
+import SearchForm from "../SearchForm";
 
 describe('SearchForm', () => {
     test('Рендерит поле введення та кнопку', () => {
