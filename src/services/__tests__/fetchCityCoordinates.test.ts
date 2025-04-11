@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { fetchCityCoordinates, CityCoordinates } from './fetchCityCoordinates';
+import {WEATHER_API_KEY} from "../../constants/environment";
+import {CityCoordinates, fetchCityCoordinates} from "../fetchCityCoordinates";
 
 jest.mock('axios');
 
@@ -30,18 +31,18 @@ describe('fetchCityCoordinates', () => {
             params: {
                 q: cityName,
                 limit: 1,
-                appid: process.env.REACT_APP_WEATHER_API_KEY,
+                appid: WEATHER_API_KEY,
             },
         });
     });
 
-    it('Повертає null, якщо дані не знайдено', async () => {
+    test('Повертає null, якщо дані не знайдено', async () => {
         mockedAxios.get.mockResolvedValueOnce({ data: [] });
         const result = await fetchCityCoordinates(cityName);
         expect(result).toBeNull();
     });
 
-    it('Повертає null при помилці запиту', async () => {
+    test('Повертає null при помилці запиту', async () => {
         mockedAxios.get.mockRejectedValueOnce(new Error('Network Error'));
         const result = await fetchCityCoordinates(cityName);
         expect(result).toBeNull();

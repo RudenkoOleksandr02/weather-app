@@ -1,17 +1,14 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
-import ForecastList from './ForecastList';
-import { renderWithMantineProvider } from '../test/helpers/renderWithMantineProvider';
+import {screen} from '@testing-library/react';
+import {renderWithMantineProvider} from "../../test/helpers/renderWithMantineProvider";
+import ForecastList from "../ForecastList";
 
-const MOCK_NOW = new Date('2025-04-07T11:00:00');
-beforeAll(() => {
-    jest.spyOn(Date, 'now').mockImplementation(() => MOCK_NOW.getTime());
-});
 
 describe('ForecastList', () => {
+    const MOCK_NOW = new Date('2025-04-07T11:00:00').getTime();
     const forecast = [
         {
-            dt: new Date('2025-04-07T12:00:00').getTime() / 1000, // сегодня
+            dt: new Date('2025-04-07T12:00:00').getTime() / 1000,
             temp: {
                 day: 25,
                 min: 20,
@@ -46,6 +43,14 @@ describe('ForecastList', () => {
         },
     ];
 
+    beforeEach(() => {
+        jest.useFakeTimers('modern');
+        jest.setSystemTime(MOCK_NOW);
+    });
+    afterAll(() => {
+        jest.useRealTimers();
+    });
+
     test('Останнє оновлення: ...', () => {
         const lastUpdated = new Date('2025-04-07T10:30:00').getTime();
         renderWithMantineProvider(
@@ -60,14 +65,14 @@ describe('ForecastList', () => {
 
     test('Тест на кількість карток', () => {
         renderWithMantineProvider(
-            <ForecastList forecast={forecast} lastUpdated={MOCK_NOW.getTime()} />
+            <ForecastList forecast={forecast} lastUpdated={MOCK_NOW} />
         );
         expect(screen.getAllByTestId('data-card')).toHaveLength(2);
     });
 
     test('Відображає правильний день тижня для кожної картки', () => {
         renderWithMantineProvider(
-            <ForecastList forecast={forecast} lastUpdated={MOCK_NOW.getTime()} />
+            <ForecastList forecast={forecast} lastUpdated={MOCK_NOW} />
         );
         forecast.forEach((day) => {
             const date = new Date(day.dt * 1000);
@@ -78,7 +83,7 @@ describe('ForecastList', () => {
 
     test('Відображає іконку та опис погоди', () => {
         renderWithMantineProvider(
-            <ForecastList forecast={forecast} lastUpdated={MOCK_NOW.getTime()} />
+            <ForecastList forecast={forecast} lastUpdated={MOCK_NOW} />
         );
 
         forecast.forEach((day, index) => {
@@ -93,7 +98,7 @@ describe('ForecastList', () => {
 
     test('Відображає температуру та опис погоди', () => {
         renderWithMantineProvider(
-            <ForecastList forecast={forecast} lastUpdated={MOCK_NOW.getTime()} />
+            <ForecastList forecast={forecast} lastUpdated={MOCK_NOW} />
         );
         forecast.forEach((day) => {
             const roundedTemp = `${Math.round(day.temp.day)}°C`;
@@ -104,10 +109,10 @@ describe('ForecastList', () => {
 
     test('Додає обведення для сьогоднішньої картки', () => {
         renderWithMantineProvider(
-            <ForecastList forecast={forecast} lastUpdated={MOCK_NOW.getTime()} />
+            <ForecastList forecast={forecast} lastUpdated={MOCK_NOW} />
         );
 
-        const currentDay = new Date().toLocaleDateString('uk-UA', { weekday: 'long' });
+        const currentDay = new Date(MOCK_NOW).toLocaleDateString('uk-UA', { weekday: 'long' });
         const todayCard = screen.getByText(currentDay);
         const card = todayCard.closest('[data-testid="data-card"]');
         expect(card).toHaveStyle('border: 2px solid blue');

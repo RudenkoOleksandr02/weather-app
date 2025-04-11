@@ -1,7 +1,5 @@
-import {getCache, setCache} from "./cacheService";
-
-const CACHE_KEY = 'weatherData';
-const CACHE_DURATION = 5 * 60 * 1000;
+import {getCache, setCache} from "../cache";
+import {CACHE_DURATION, CACHE_KEY} from "../../constants/cache";
 
 describe('cacheService', () => {
     const city = 'Kyiv';
@@ -25,7 +23,6 @@ describe('cacheService', () => {
 
         const parsed = JSON.parse(stored as string);
         expect(parsed.data).toEqual(data);
-        // Перевіряємо, що timestamp є числом і приблизно співпадає з поточним часом
         expect(typeof parsed.timestamp).toBe('number');
     });
 

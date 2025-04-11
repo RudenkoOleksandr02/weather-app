@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, Text, Image, Grid } from '@mantine/core';
-import { DailyWeather } from '../services/fetchWeather';
+import {Card, Text, Image, Grid} from '@mantine/core';
+import {DailyWeather} from '../services/fetchWeather';
 
 interface ForecastListProps {
     forecast: DailyWeather[];

@@ -1,5 +1,5 @@
-const CACHE_KEY = 'weatherData';
-const CACHE_DURATION = 5 * 60 * 1000;
+import {CACHE_DURATION, CACHE_KEY} from "../constants/cache";
+
 
 interface CacheEntry {
     data: any;
