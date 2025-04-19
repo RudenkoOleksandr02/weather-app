@@ -1,53 +1,53 @@
-import {getCache, setCache} from "../cache";
-import {CACHE_DURATION, CACHE_KEY} from "../../constants/cache";
+import { getCache, setCache } from '../cache';
+import { CACHE_DURATION, CACHE_KEY } from '../../constants/cache';
 
 describe('cacheService', () => {
-    const city = 'Kyiv';
-    const data = { temperature: 20 };
+  const city = 'Kyiv';
+  const data = { temperature: 20 };
 
-    beforeEach(() => {
-        localStorage.clear();
-        jest.useFakeTimers();
-    });
+  beforeEach(() => {
+    localStorage.clear();
+    jest.useFakeTimers();
+  });
 
-    afterEach(() => {
-        jest.useRealTimers();
-        jest.restoreAllMocks();
-    });
+  afterEach(() => {
+    jest.useRealTimers();
+    jest.restoreAllMocks();
+  });
 
-    test('setCache має зберігати дані в localStorage', () => {
-        setCache(city, data);
+  test('setCache має зберігати дані в localStorage', () => {
+    setCache(city, data);
 
-        const stored = localStorage.getItem(`${CACHE_KEY}_${city}`);
-        expect(stored).not.toBeNull();
+    const stored = localStorage.getItem(`${CACHE_KEY}_${city}`);
+    expect(stored).not.toBeNull();
 
-        const parsed = JSON.parse(stored as string);
-        expect(parsed.data).toEqual(data);
-        expect(typeof parsed.timestamp).toBe('number');
-    });
+    const parsed = JSON.parse(stored as string);
+    expect(parsed.data).toEqual(data);
+    expect(typeof parsed.timestamp).toBe('number');
+  });
 
-    test('getCache повертає дані, якщо кеш не протерміновано', () => {
-        setCache(city, data);
+  test('getCache повертає дані, якщо кеш не протерміновано', () => {
+    setCache(city, data);
 
-        const cacheEntry = getCache(city);
-        expect(cacheEntry).not.toBeNull();
-        if (cacheEntry) {
-            expect(cacheEntry.data).toEqual(data);
-        }
-    });
+    const cacheEntry = getCache(city);
+    expect(cacheEntry).not.toBeNull();
+    if (cacheEntry) {
+      expect(cacheEntry.data).toEqual(data);
+    }
+  });
 
-    test('getCache повертає null, якщо кеш протерміновано', () => {
-        setCache(city, data);
+  test('getCache повертає null, якщо кеш протерміновано', () => {
+    setCache(city, data);
 
-        const now = Date.now();
-        jest.spyOn(Date, 'now').mockReturnValue(now + CACHE_DURATION + 1);
+    const now = Date.now();
+    jest.spyOn(Date, 'now').mockReturnValue(now + CACHE_DURATION + 1);
 
-        const cacheEntry = getCache(city);
-        expect(cacheEntry).toBeNull();
-    });
+    const cacheEntry = getCache(city);
+    expect(cacheEntry).toBeNull();
+  });
 
-    test('getCache повертає null, якщо запис відсутній', () => {
-        const cacheEntry = getCache(city);
-        expect(cacheEntry).toBeNull();
-    });
+  test('getCache повертає null, якщо запис відсутній', () => {
+    const cacheEntry = getCache(city);
+    expect(cacheEntry).toBeNull();
+  });
 });

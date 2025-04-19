@@ -1,9 +1,9 @@
 import React from 'react';
-import {screen} from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import App from './App';
-import {useWeather} from './hooks/useWeather';
-import {renderWithMantineProvider} from "./test/helpers/renderWithMantineProvider";
-import {DailyWeather} from "./services/fetchWeather";
+import { useWeather } from './hooks/useWeather';
+import { renderWithMantineProvider } from './test/helpers/renderWithMantineProvider';
+import { DailyWeather } from './services/fetchWeather';
 
 jest.mock('./hooks/useWeather');
 const mockUseWeather = useWeather as jest.Mock;
@@ -52,11 +52,13 @@ describe('App', () => {
   });
 
   test('Рендерит ForecastList', () => {
-    const fakeWeather: DailyWeather[] = [{
-      dt: 1,
-      temp: {day: 1, min: 1, max: 1, night: 1, eve: 1, morn: 1,},
-      weather: [{description: '1', icon: '1',}]
-    }];
+    const fakeWeather: DailyWeather[] = [
+      {
+        dt: 1,
+        temp: { day: 1, min: 1, max: 1, night: 1, eve: 1, morn: 1 },
+        weather: [{ description: '1', icon: '1' }],
+      },
+    ];
 
     mockUseWeather.mockReturnValue({
       weather: fakeWeather,
@@ -65,7 +67,7 @@ describe('App', () => {
       lastUpdated: 1234567890,
     });
 
-    renderWithMantineProvider(<App/>);
+    renderWithMantineProvider(<App />);
     expect(screen.getByTestId('data-forecast-list')).toBeInTheDocument();
   });
 });
