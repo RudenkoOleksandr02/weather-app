@@ -1,9 +1,10 @@
 import { getCache, setCache } from '../cache';
 import { CACHE_DURATION, CACHE_KEY } from '../../constants/cache';
+import { DailyWeather } from '../../services/fetchWeather';
 
 describe('cacheService', () => {
   const city = 'Kyiv';
-  const data = { temperature: 20 };
+  const data: DailyWeather[] = [];
 
   beforeEach(() => {
     localStorage.clear();
