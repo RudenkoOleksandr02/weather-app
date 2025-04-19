@@ -1,41 +1,37 @@
 import React from 'react';
-import {TextInput, Button, Group} from '@mantine/core';
+import { TextInput, Button, Group } from '@mantine/core';
 
 interface SearchFormProps {
-    onSearch: (city: string) => void;
+  onSearch: (city: string) => void;
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
-    const [city, setCity] = React.useState('');
+  const [city, setCity] = React.useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (city.trim()) {
-            onSearch(city.trim());
-        }
-    };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (city.trim()) {
+      onSearch(city.trim());
+    }
+  };
 
-    return (
-        <form onSubmit={handleSubmit} data-testid="data-search-form">
-            <Group display="flex" justify="space-between">
-                <TextInput
-                    data-testid="search-input"
-                    placeholder="Введіть населений пункт"
-                    value={city}
-                    onChange={(e) => setCity(e.currentTarget.value)}
-                    flex='1'
-                    size='md'
-                />
-                <Button
-                    data-testid="search-button"
-                    type="submit"
-                    size='md'
-                >
-                    Пошук
-                </Button>
-            </Group>
-        </form>
-    );
+  return (
+    <form onSubmit={handleSubmit} data-testid="data-search-form">
+      <Group display="flex" justify="space-between">
+        <TextInput
+          data-testid="search-input"
+          placeholder="Введіть населений пункт"
+          value={city}
+          onChange={(e) => setCity(e.currentTarget.value)}
+          flex="1"
+          size="md"
+        />
+        <Button data-testid="search-button" type="submit" size="md">
+          Пошук
+        </Button>
+      </Group>
+    </form>
+  );
 };
 
 export default SearchForm;
