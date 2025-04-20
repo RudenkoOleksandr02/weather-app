@@ -19,8 +19,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true
   },
-  "include": ["src"],
   "exclude": ["node_modules"],
+  "include": ["src"],
   "types": ["node", "jest", "@testing-library/jest-dom"]
 }
