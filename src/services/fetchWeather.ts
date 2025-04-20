@@ -18,7 +18,10 @@ export interface DailyWeather {
   }>;
 }
 
-export const fetchWeather = async (city: string, config?: AxiosRequestConfig): Promise<DailyWeather[]> => {
+export const fetchWeather = async (
+  city: string,
+  config?: AxiosRequestConfig,
+): Promise<DailyWeather[]> => {
   try {
     const coordinates = await fetchCityCoordinates(city);
 
