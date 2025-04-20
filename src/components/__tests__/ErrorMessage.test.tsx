@@ -1,4 +1,3 @@
-import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithMantineProvider } from '../../test/helpers/renderWithMantineProvider';
 import ErrorMessage from '../ErrorMessage';

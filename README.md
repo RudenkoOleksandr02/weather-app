@@ -22,6 +22,11 @@ A live demo is available at: https://weather-app-nine-ebon-57.vercel.app/
 
 ---
 
+## Filling evn
+
+- REACT_APP_WEATHER_API_KEY
+- REACT_APP_WEATHER_BASE_URL
+
 ## Installation
 
 1. **Clone the repository**

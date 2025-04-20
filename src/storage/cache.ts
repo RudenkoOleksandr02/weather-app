@@ -6,17 +6,16 @@ interface CacheEntry {
   timestamp: number;
 }
 
-export const getCacheKey = (city: string) => {
-  return `${CACHE_KEY}_${city.trim().toLowerCase().replace(/\s+/g, '_')}`;
-};
+export const getCacheKey = (city: string): string =>
+  `${CACHE_KEY}_${city.trim().toLowerCase().replace(/\s+/g, '_')}`;
 
-export const setCache = (city: string, data: DailyWeather[]) => {
+export const setCache = (city: string, data: DailyWeather[]): void => {
   const cacheEntry: CacheEntry = { data, timestamp: Date.now() };
   const key = getCacheKey(city);
   try {
     localStorage.setItem(key, JSON.stringify(cacheEntry));
   } catch (err) {
-    console.warn('Неможливо записати в localStorage', err);
+    console.warn('Невозможно записать в localStorage', err);
   }
 };
 
@@ -26,14 +25,15 @@ export const getCache = (city: string): CacheEntry | null => {
     const cached = localStorage.getItem(key);
     if (!cached) return null;
 
-    const cacheEntry: CacheEntry = JSON.parse(cached);
+    // Явно приводим к типу, чтобы убрать any
+    const cacheEntry = JSON.parse(cached) as CacheEntry;
     if (Date.now() - cacheEntry.timestamp < CACHE_DURATION) {
       return cacheEntry;
     } else {
       localStorage.removeItem(key);
     }
   } catch (err) {
-    console.warn('Помилка при читанні або парсингу localStorage', err);
+    console.warn('Ошибка при чтении или парсинге localStorage', err);
   }
 
   return null;

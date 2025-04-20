@@ -1,4 +1,3 @@
-import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 import { renderWithMantineProvider } from '../../test/helpers/renderWithMantineProvider';
 import SearchForm from '../SearchForm';

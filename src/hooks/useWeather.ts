@@ -1,62 +1,76 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { fetchWeather, DailyWeather } from '../services/fetchWeather';
 import { getCache, setCache } from '../storage/cache';
 
-interface UseWeatherResult {
+export interface UseWeatherResult {
   weather: DailyWeather[] | null;
   loading: boolean;
   error: string;
   lastUpdated: number;
+  refresh: () => void;
 }
 
 export const useWeather = (city: string): UseWeatherResult => {
   const [weather, setWeather] = useState<DailyWeather[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const [lastUpdated, setLastUpdated] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [lastUpdated, setLastUpdated] = useState(0);
 
-  useEffect(() => {
-    if (!city) return;
+  const controllerRef = useRef<AbortController | null>(null);
 
-    const controller = new AbortController();
-    const signal = controller.signal;
+  const loadWeather = useCallback(
+    async (force = false) => {
+      if (!city) return;
+      controllerRef.current?.abort();
+      const controller = new AbortController();
+      controllerRef.current = controller;
 
-    const loadWeather = async () => {
       setLoading(true);
       setError('');
 
+      // Попытка взять из кэша
+      const cached = getCache(city);
+      if (cached && !force) {
+        setWeather(cached.data);
+        setLastUpdated(cached.timestamp);
+        setLoading(false);
+        return;
+      }
+
       try {
-        const cached = getCache(city);
-        if (cached) {
-          setWeather(cached.data);
-          setLastUpdated(cached.timestamp);
-          return;
-        }
-
-        const data = await fetchWeather(city, { signal });
-        setWeather(data);
-
+        const data = await fetchWeather(city, { signal: controller.signal });
         const now = Date.now();
-        setCache(city, data);
+
+        setWeather(data);
         setLastUpdated(now);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          if (err.name === 'AbortError') {
+        setCache(city, data);
+      } catch (rawErr: unknown) {
+        let msg = 'Ошибка загрузки погоды';
+        if (rawErr instanceof Error) {
+          if (rawErr.name === 'AbortError') {
+            // Прерывание запроса — просто выходим
             return;
           }
-          setError(err.message || 'Ошибка загрузки погоды');
+          msg = rawErr.message;
         }
+        setError(msg);
       } finally {
         setLoading(false);
       }
-    };
+    },
+    [city],
+  );
 
-    loadWeather();
-
+  useEffect(() => {
+    void loadWeather(false);
     return () => {
-      controller.abort();
+      controllerRef.current?.abort();
     };
-  }, [city]);
+  }, [city, loadWeather]);
 
-  return { weather, loading, error, lastUpdated };
+  const refresh = useCallback(() => {
+    void loadWeather(true);
+  }, [loadWeather]);
+
+  return { weather, loading, error, lastUpdated, refresh };
 };
