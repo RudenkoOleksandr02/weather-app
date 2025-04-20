@@ -15,7 +15,7 @@ export const setCache = (city: string, data: DailyWeather[]): void => {
   try {
     localStorage.setItem(key, JSON.stringify(cacheEntry));
   } catch (err) {
-    console.warn('Невозможно записать в localStorage', err);
+    console.warn('Неможливо записати в localStorage', err);
   }
 };
 
@@ -25,7 +25,6 @@ export const getCache = (city: string): CacheEntry | null => {
     const cached = localStorage.getItem(key);
     if (!cached) return null;
 
-    // Явно приводим к типу, чтобы убрать any
     const cacheEntry = JSON.parse(cached) as CacheEntry;
     if (Date.now() - cacheEntry.timestamp < CACHE_DURATION) {
       return cacheEntry;
@@ -33,8 +32,7 @@ export const getCache = (city: string): CacheEntry | null => {
       localStorage.removeItem(key);
     }
   } catch (err) {
-    console.warn('Ошибка при чтении или парсинге localStorage', err);
+    console.warn('Помилка при читанні або парсингу localStorage', err);
   }
-
   return null;
 };

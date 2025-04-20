@@ -2,7 +2,7 @@
 
 A simple React & TypeScript application that fetches and displays current weather data using the OpenWeatherMap API. The design is clean, minimalistic, and built with Mantine components.
 
-![App Screenshot](https://res.cloudinary.com/dk4qggbsf/image/upload/v1744507244/weather-app/mqvzbcjpiv318lgsoo58.png)
+![App Screenshot](https://res.cloudinary.com/dk4qggbsf/image/upload/v1745190079/weather-app/exaj9bntjdrcrkuf1vz7.png)
 
 ---
 

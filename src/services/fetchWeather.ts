@@ -29,37 +29,36 @@ export const fetchWeather = async (
   const baseUrl = WEATHER_BASE_URL!;
   const apiKey = WEATHER_API_KEY!;
 
-  const coords: CityCoordinates | null = await fetchCityCoordinates(
-    city,
-    config,
-  );
+  const coords: CityCoordinates | null = config
+    ? await fetchCityCoordinates(city, config)
+    : await fetchCityCoordinates(city);
+
   if (!coords) {
-    throw new Error(`Город "${city}" не найден`);
+    throw new Error(`Місто ${city} не знайдено`);
+  }
+
+  const url = `${baseUrl}/data/3.0/onecall`;
+  const params = {
+    lat: coords.lat,
+    lon: coords.lon,
+    exclude: 'current,minutely,hourly,alerts',
+    appid: apiKey,
+    units: 'metric',
+    lang: 'ua',
+  };
+  const options: AxiosRequestConfig = { params };
+  if (config?.signal) {
+    options.signal = config.signal;
   }
 
   try {
-    const response = await axios.get<OneCallResponse>(
-      `${baseUrl}/data/3.0/onecall`,
-      {
-        signal: config?.signal,
-        params: {
-          lat: coords.lat,
-          lon: coords.lon,
-          exclude: 'current,minutely,hourly,alerts',
-          appid: apiKey,
-          units: 'metric',
-          lang: 'ua',
-        },
-      },
-    );
-
+    const response = await axios.get<OneCallResponse>(url, options);
     if (!response.data || !Array.isArray(response.data.daily)) {
-      throw new Error('Неверный формат ответа API');
+      throw new Error('Неправильний формат відповіді API');
     }
-
     return response.data.daily;
   } catch (err) {
-    console.error('Ошибка при получении прогноза погоды:', err);
+    console.error('Помилка при отриманні прогнозу погоди:', err);
     throw err;
   }
 };

@@ -28,7 +28,6 @@ export const useWeather = (city: string): UseWeatherResult => {
       setLoading(true);
       setError('');
 
-      // Попытка взять из кэша
       const cached = getCache(city);
       if (cached && !force) {
         setWeather(cached.data);
@@ -40,15 +39,13 @@ export const useWeather = (city: string): UseWeatherResult => {
       try {
         const data = await fetchWeather(city, { signal: controller.signal });
         const now = Date.now();
-
         setWeather(data);
         setLastUpdated(now);
         setCache(city, data);
       } catch (rawErr: unknown) {
-        let msg = 'Ошибка загрузки погоды';
+        let msg = 'Помилка завантаження погоди';
         if (rawErr instanceof Error) {
           if (rawErr.name === 'AbortError') {
-            // Прерывание запроса — просто выходим
             return;
           }
           msg = rawErr.message;
@@ -62,6 +59,7 @@ export const useWeather = (city: string): UseWeatherResult => {
   );
 
   useEffect(() => {
+    if (!city) return;
     void loadWeather(false);
     return () => {
       controllerRef.current?.abort();

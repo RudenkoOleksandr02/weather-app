@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Loader, Space } from '@mantine/core';
+import { Box, Button, Container, Loader, Space } from '@mantine/core';
 import SearchForm from './components/SearchForm';
 import ErrorMessage from './components/ErrorMessage';
 import ForecastList from './components/ForecastList';
@@ -12,14 +12,26 @@ const App: React.FC = () => {
   return (
     <Container size="lg" py="xl">
       <SearchForm onSearch={setCity} />
-      <h2>Прогноз погоди: {city}</h2>
+
+      <Box
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'start',
+          gap: '10px',
+        }}
+      >
+        <h2>Прогноз погоди: {city}</h2>
+        <Button onClick={refresh} disabled={loading}>
+          Оновити
+        </Button>
+      </Box>
+
       {loading && <Loader data-testid="data-loader" variant="bars" />}
       {error && <ErrorMessage message={error} />}
+
       <Space h="md" />
-      <Button onClick={refresh} disabled={loading}>
-        Оновити
-      </Button>
-      <Space h="md" />
+
       {weather && <ForecastList forecast={weather} lastUpdated={lastUpdated} />}
     </Container>
   );
