@@ -39,11 +39,13 @@ export const useWeather = (city: string): UseWeatherResult => {
         const now = Date.now();
         setCache(city, data);
         setLastUpdated(now);
-      } catch (err: any) {
-        if (err.name === 'AbortError') {
-          return;
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          if (err.name === 'AbortError') {
+            return;
+          }
+          setError(err.message || 'Ошибка загрузки погоды');
         }
-        setError(err.message || 'Ошибка загрузки погоды');
       } finally {
         setLoading(false);
       }
