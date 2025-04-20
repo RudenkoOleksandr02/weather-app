@@ -1,40 +1,60 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { fetchWeather, DailyWeather } from '../services/fetchWeather';
 import { getCache, setCache } from '../storage/cache';
 
-export const useWeather = (city: string) => {
-  const [weather, setWeather] = React.useState<DailyWeather[] | null>(null);
-  const [error, setError] = React.useState<string>('');
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [lastUpdated, setLastUpdated] = React.useState<number>(0);
+interface UseWeatherResult {
+  weather: DailyWeather[] | null;
+  loading: boolean;
+  error: string;
+  lastUpdated: number;
+}
 
-  React.useEffect(() => {
+export const useWeather = (city: string): UseWeatherResult => {
+  const [weather, setWeather] = useState<DailyWeather[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [lastUpdated, setLastUpdated] = useState<number>(0);
+
+  useEffect(() => {
     if (!city) return;
+
+    const controller = new AbortController();
+    const signal = controller.signal;
 
     const loadWeather = async () => {
       setLoading(true);
       setError('');
+
       try {
         const cached = getCache(city);
         if (cached) {
           setWeather(cached.data);
           setLastUpdated(cached.timestamp);
-        } else {
-          const data = await fetchWeather(city);
-          setWeather(data);
-          const now = Date.now();
-          setCache(city, data);
-          setLastUpdated(now);
+          return;
         }
-      } catch (err) {
-        setError('Неможливо отримати дані про погоду');
+
+        const data = await fetchWeather(city, { signal });
+        setWeather(data);
+
+        const now = Date.now();
+        setCache(city, data);
+        setLastUpdated(now);
+      } catch (err: any) {
+        if (err.name === 'AbortError') {
+          return;
+        }
+        setError(err.message || 'Ошибка загрузки погоды');
       } finally {
         setLoading(false);
       }
     };
 
     loadWeather();
+
+    return () => {
+      controller.abort();
+    };
   }, [city]);
 
-  return { weather, error, loading, lastUpdated };
+  return { weather, loading, error, lastUpdated };
 };
