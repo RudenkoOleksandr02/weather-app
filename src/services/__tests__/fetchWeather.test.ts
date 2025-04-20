@@ -23,20 +23,8 @@ describe('fetchWeather', () => {
     const fakeDailyWeather = [
       {
         dt: 1618317040,
-        temp: {
-          day: 15,
-          min: 10,
-          max: 18,
-          night: 11,
-          eve: 14,
-          morn: 10,
-        },
-        weather: [
-          {
-            description: 'ясно',
-            icon: '01d',
-          },
-        ],
+        temp: { day: 15, min: 10, max: 18, night: 11, eve: 14, morn: 10 },
+        weather: [{ description: 'ясно', icon: '01d' }],
       },
     ];
 
@@ -76,6 +64,7 @@ describe('fetchWeather', () => {
     const city = 'Київ';
     const coordinates = { lat: 50.4501, lon: 30.5234 } as CityCoordinates;
     mockedFetchCityCoordinates.mockResolvedValue(coordinates);
+
     const apiError = new Error('Помилка API');
     mockedAxios.get.mockRejectedValue(apiError);
 
