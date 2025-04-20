@@ -6,18 +6,35 @@ interface CacheEntry {
   timestamp: number;
 }
 
+export const getCacheKey = (city: string) => {
+  return `${CACHE_KEY}_${city.trim().toLowerCase().replace(/\s+/g, '_')}`;
+};
+
 export const setCache = (city: string, data: DailyWeather[]) => {
   const cacheEntry: CacheEntry = { data, timestamp: Date.now() };
-  localStorage.setItem(`${CACHE_KEY}_${city}`, JSON.stringify(cacheEntry));
+  const key = getCacheKey(city);
+  try {
+    localStorage.setItem(key, JSON.stringify(cacheEntry));
+  } catch (err) {
+    console.warn('Неможливо записати в localStorage', err);
+  }
 };
 
 export const getCache = (city: string): CacheEntry | null => {
-  const cached = localStorage.getItem(`${CACHE_KEY}_${city}`);
-  if (cached) {
-    const cacheEntry = JSON.parse(cached);
+  const key = getCacheKey(city);
+  try {
+    const cached = localStorage.getItem(key);
+    if (!cached) return null;
+
+    const cacheEntry: CacheEntry = JSON.parse(cached);
     if (Date.now() - cacheEntry.timestamp < CACHE_DURATION) {
       return cacheEntry;
+    } else {
+      localStorage.removeItem(key);
     }
+  } catch (err) {
+    console.warn('Помилка при читанні або парсингу localStorage', err);
   }
+
   return null;
 };

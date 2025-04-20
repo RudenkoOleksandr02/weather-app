@@ -1,10 +1,11 @@
-import { getCache, setCache } from '../cache';
-import { CACHE_DURATION, CACHE_KEY } from '../../constants/cache';
+import { getCache, setCache, getCacheKey } from '../cache';
+import { CACHE_DURATION } from '../../constants/cache';
 import { DailyWeather } from '../../services/fetchWeather';
 
 describe('cacheService', () => {
   const city = 'Kyiv';
   const data: DailyWeather[] = [];
+  const key = getCacheKey(city);
 
   beforeEach(() => {
     localStorage.clear();
@@ -19,7 +20,7 @@ describe('cacheService', () => {
   test('setCache має зберігати дані в localStorage', () => {
     setCache(city, data);
 
-    const stored = localStorage.getItem(`${CACHE_KEY}_${city}`);
+    const stored = localStorage.getItem(key);
     expect(stored).not.toBeNull();
 
     const parsed = JSON.parse(stored as string);

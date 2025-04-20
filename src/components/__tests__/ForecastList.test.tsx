@@ -8,14 +8,7 @@ describe('ForecastList', () => {
   const forecast = [
     {
       dt: new Date('2025-04-07T12:00:00').getTime() / 1000,
-      temp: {
-        day: 25,
-        min: 20,
-        max: 27,
-        night: 18,
-        eve: 23,
-        morn: 21,
-      },
+      temp: { day: 25, min: 20, max: 27, night: 18, eve: 23, morn: 21 },
       weather: [
         {
           description: 'ясно',
@@ -25,14 +18,7 @@ describe('ForecastList', () => {
     },
     {
       dt: new Date('2025-04-08T12:00:00').getTime() / 1000,
-      temp: {
-        day: 22,
-        min: 18,
-        max: 24,
-        night: 17,
-        eve: 21,
-        morn: 19,
-      },
+      temp: { day: 22, min: 18, max: 24, night: 17, eve: 21, morn: 19 },
       weather: [
         {
           description: 'облачно',
