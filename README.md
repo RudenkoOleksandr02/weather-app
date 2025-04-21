@@ -27,9 +27,12 @@ A live demo is available at: https://weather-app-nine-ebon-57.vercel.app/
 - REACT_APP_WEATHER_API_KEY
 - REACT_APP_WEATHER_BASE_URL
 
-## Installation
+## Installation & Environment Variables
 
 1. **Clone the repository**
    ```bash
    git clone https://github.com/RudenkoOleksandr02/weather-app.git
    cd weather-app
+2. **Copy `env.example` to `.env.local` or `.env`**
+   ```bash
+   cp env.example .env.local
